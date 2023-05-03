@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   uuid = "0EDA21DC-9A18-458D-AB64-18766861383A"
+   type = "1"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "1B16F06B-5C4C-4215-91E4-0A59C49998AF"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "AudioRecordSwiftUI/Flow/ContentViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "114"
+            endingLineNumber = "114"
+            landmarkName = "deleteRecord()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "1B16F06B-5C4C-4215-91E4-0A59C49998AF - 1b0ecfecab2caf6a"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "AudioRecordSwiftUI.ContentViewModel.deleteRecord() -&gt; ()"
+                  moduleName = "AudioRecordSwiftUI"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/dmitrykushner/Documents/AudioRecordSwiftUI/AudioRecordSwiftUI/Flow/ContentViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "114"
+                  endingLineNumber = "114"
+                  offsetFromSymbolStart = "176">
+               </Location>
+               <Location
+                  uuid = "1B16F06B-5C4C-4215-91E4-0A59C49998AF - 1b0ecfecab2caf6a"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "AudioRecordSwiftUI.ContentViewModel.deleteRecord() -&gt; ()"
+                  moduleName = "AudioRecordSwiftUI"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/dmitrykushner/Documents/AudioRecordSwiftUI/AudioRecordSwiftUI/Flow/ContentViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "114"
+                  endingLineNumber = "114"
+                  offsetFromSymbolStart = "500">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>
