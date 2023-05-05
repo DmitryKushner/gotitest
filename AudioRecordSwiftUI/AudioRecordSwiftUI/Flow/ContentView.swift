@@ -20,17 +20,8 @@ struct ContentView: View {
             VStack {
                 Spacer()
                 VStack {
-                    Button(action: {
-                        switch viewModel.state {
-                        case .withoutRecord:
-                            viewModel.startRecord()
-                        case .startRecord:
-                            viewModel.finishRecord()
-                        case .haveRecord:
-                            viewModel.playRecord()
-                        }
-                    }) {
-                        Image(viewModel.state.buttonImageName)
+                    Button(action: { viewModel.handlePress() }) {
+                        Image(viewModel.buttonImageName)
                             .renderingMode(
                                 Image.TemplateRenderingMode?.init(Image.TemplateRenderingMode.original)
                             )
@@ -39,13 +30,10 @@ struct ContentView: View {
                     Button("Delete record") {
                         viewModel.deleteRecord()
                     }
-                    .isHidden(viewModel.state != .haveRecord)
+                    .isHidden(viewModel.deleteButtonHidden)
                 }
                 Spacer()
             }
-        }
-        .onAppear {
-            viewModel.checkRecord()
         }
     }
 }

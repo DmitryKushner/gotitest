@@ -13,134 +13,106 @@ class ContentViewModel: NSObject, ObservableObject {
     // MARK: - Types
     
     enum RecordState {
-        case withoutRecord
-        case startRecord
-        case haveRecord
-        
-        var buttonImageName: String {
-            switch self {
-            case .withoutRecord:
-                return "withoutRecord"
-            case .startRecord:
-                return "startRecord"
-            case .haveRecord:
-                return "haveRecord"
+        case recording
+        case stopped
+        case playing
+    }
+    
+    // MARK: - Public Properties
+    
+    @Published var buttonImageName = ""
+    @Published var deleteButtonHidden = true
+    
+    // MARK: - Private Properties
+    
+    private var state: RecordState = .recording {
+        didSet {
+            switch state {
+            case .recording:
+                buttonImageName = "withoutRecord"
+                deleteButtonHidden = true
+            case .stopped:
+                buttonImageName = "startRecord"
+                deleteButtonHidden = true
+            case .playing:
+                buttonImageName = "haveRecord"
+                deleteButtonHidden = false
             }
         }
     }
+    private var audioPlayerService: AudioPlayerServiceProtocol
+    private var audioRecorderService: AudioRecorderServiceProtocol
+    private var fileService: FileServiceProtocol
+    private var recordURL: URL?
     
-    // MARK: - Properties
+    // MARK: - Init
     
-    @Published private(set) var state: RecordState = .withoutRecord
-    var audioPlayer: AVAudioPlayer!
-    var audioRecorder: AVAudioRecorder!
-    @Published var record: URL?
+    override init() {
+        audioPlayerService = AudioPlayerService()
+        audioRecorderService = AudioRecorderService()
+        fileService = FileService()
+        super.init()
+        commonInit()
+    }
     
     // MARK: - Public Methods
     
-    func startRecord() {
-        let recordingSession = AVAudioSession.sharedInstance()
-        
-        do {
-            try recordingSession.setCategory(.playAndRecord, mode: .default)
-            try recordingSession.setActive(true)
-        } catch {
-            print("Failed to set up recording session")
-        }
-        
-        let documentPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        let audioFilename = documentPath
-            .appendingPathComponent("Test Dimas \(Date().toString(dateFormat: "dd-MM-YY 'at' HH:mm:ss")).m4a")
-        
-        let settings = [
-            AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
-            AVSampleRateKey: 12000,
-            AVNumberOfChannelsKey: 1,
-            AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue
-        ]
-        
-        do {
-            audioRecorder = try AVAudioRecorder(url: audioFilename, settings: settings)
-            audioRecorder.record()
-
-            state = .startRecord
-        } catch {
-            state = .withoutRecord
-            print("Could not start recording")
-        }
-    }
-    
-    func finishRecord() {
-        audioRecorder.stop()
-        state = .haveRecord
-    }
-    
-    func checkRecord() {
-        fetchRecords() { [weak self] in
-            guard let record = self?.record else {
-                self?.state = .withoutRecord
-                return
-            }
-            self?.state = .haveRecord
-        }
-    }
-    
-    func playRecord() {
-        fetchRecords() { [weak self] in
-            guard let record = self?.record else {
-                self?.state = .withoutRecord
-                return
-            }
-            
-            let playbackSession = AVAudioSession.sharedInstance()
-            
-            do {
-                try playbackSession.overrideOutputAudioPort(AVAudioSession.PortOverride.speaker)
-            } catch {
-                print("Playing over the device's speakers failed")
-            }
-            
-            do {
-                self?.audioPlayer = try AVAudioPlayer(contentsOf: record)
-                self?.audioPlayer.delegate = self
-                self?.audioPlayer.play()
-            } catch {
-                print("Playback failed.")
-            }
+    func handlePress() {
+        switch state {
+        case .recording:
+            startRecord()
+        case .stopped:
+            finishRecord()
+        case .playing:
+            playRecord()
         }
     }
     
     func deleteRecord() {
-        guard let record = record else { return }
-        do {
-            try? FileManager.default.removeItem(at: record)
-            state = .withoutRecord
-        } catch {
-            print("Error of deleting")
+        guard let recordURL = recordURL else { return }
+        fileService.deleteRecord(with: recordURL) { [weak self] successfullyRemoved in
+            self?.state = successfullyRemoved ? .recording : .stopped
         }
     }
     
     // MARK: - Private Methods
     
-    private func fetchRecords(completion: @escaping () -> Void) {
-        let path = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        let directoryContents = try! FileManager.default.contentsOfDirectory(at: path, includingPropertiesForKeys: nil)
-            .filter {
-                $0.absoluteString.contains("m4a")
-            }
-
-        record = directoryContents.first
-        completion()
+    private func commonInit() {
+        audioRecorderService.successFinishRecordStateHandler = { [weak self] in
+            self?.state = .playing
+        }
+        recordURL = fileService.fetchRecord()
+        checkRecord()
     }
     
-    private func getDocumentsDirectory() -> URL {
-        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-        return paths[0]
+    private func checkRecord() {
+        guard recordURL != nil else {
+            state = .recording
+            return
+        }
+        state = .playing
     }
-}
-
-extension ContentViewModel: AVAudioPlayerDelegate {
-    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
-        state = .haveRecord
+    
+    private func startRecord() {
+        let documentPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        let audioFilename = documentPath
+            .appendingPathComponent("Test Dimas \(Date().toString(dateFormat: "dd-MM-YY 'at' HH:mm:ss")).m4a")
+        
+        audioRecorderService.startRecord(with: audioFilename) { [weak self] canRecord in
+            self?.state = canRecord ? .stopped : .recording
+        }
+    }
+    
+    private func finishRecord() {
+        audioRecorderService.finishRecord()
+    }
+    
+    private func playRecord() {
+        guard let recordURL = recordURL else {
+            state = .recording
+            return
+        }
+        
+        audioPlayerService.playRecord(with: recordURL)
     }
 }
