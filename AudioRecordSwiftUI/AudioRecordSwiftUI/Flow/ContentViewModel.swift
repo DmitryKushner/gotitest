@@ -22,6 +22,12 @@ class ContentViewModel: NSObject, ObservableObject {
     
     @Published var buttonImageName = ""
     @Published var deleteButtonHidden = true
+    @Published var alertModel: AlertModel? {
+        didSet {
+            needShowAllert = alertModel != nil
+        }
+    }
+    @Published var needShowAllert = false
     
     // MARK: - Private Properties
     
@@ -72,14 +78,22 @@ class ContentViewModel: NSObject, ObservableObject {
         guard let recordURL = recordURL else { return }
         fileService.deleteRecord(with: recordURL) { [weak self] successfullyRemoved in
             self?.state = successfullyRemoved ? .recording : .stopped
+            if !successfullyRemoved {
+                self?.alertModel = .init(title: "Что-то пошло не так", message: "Файл не может быть удалён")
+            }
         }
     }
     
     // MARK: - Private Methods
     
     private func commonInit() {
-        audioRecorderService.successFinishRecordStateHandler = { [weak self] in
+        audioRecorderService.successFinishRecordStateHandler = { [weak self] canPlay in
             self?.state = .playing
+            if !canPlay {
+                self?.alertModel = .init(title: "Что-то пошло не так", message: "Невозможно прослушать запись")
+            } else {
+                self?.recordURL = self?.fileService.fetchRecord()
+            }
         }
         recordURL = fileService.fetchRecord()
         checkRecord()
@@ -94,12 +108,11 @@ class ContentViewModel: NSObject, ObservableObject {
     }
     
     private func startRecord() {
-        let documentPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        let audioFilename = documentPath
-            .appendingPathComponent("Test Dimas \(Date().toString(dateFormat: "dd-MM-YY 'at' HH:mm:ss")).m4a")
-        
-        audioRecorderService.startRecord(with: audioFilename) { [weak self] canRecord in
+        audioRecorderService.startRecord(with: fileService.startRecordDirectoryURL()) { [weak self] canRecord in
             self?.state = canRecord ? .stopped : .recording
+            if !canRecord {
+                self?.alertModel = .init(title: "Что-то пошло не так", message: "Запись не может быть начата")
+            }
         }
     }
     

@@ -7,16 +7,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "D5D27910-CF65-488F-AF20-56B3FC6CE85D"
+            uuid = "082DEE4D-E3F5-4DBC-A87F-6B1279AB50CF"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "AudioRecordSwiftUI/Services/AudioRecorderService.swift"
+            filePath = "AudioRecordSwiftUI/Flow/ContentViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "64"
-            endingLineNumber = "64"
-            landmarkName = "audioRecorderDidFinishRecording(_:successfully:)"
+            startingLineNumber = "95"
+            endingLineNumber = "95"
+            landmarkName = "commonInit()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

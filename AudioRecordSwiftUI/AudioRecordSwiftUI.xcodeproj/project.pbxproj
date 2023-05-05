@@ -17,6 +17,7 @@
 		FDB2BEBB2A04F2790065D5CF /* AudioRecorderService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDB2BEBA2A04F2790065D5CF /* AudioRecorderService.swift */; };
 		FDB2BEBD2A04F2A30065D5CF /* AudioPlayerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDB2BEBC2A04F2A30065D5CF /* AudioPlayerService.swift */; };
 		FDB2BEBF2A04F2AF0065D5CF /* FileService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDB2BEBE2A04F2AF0065D5CF /* FileService.swift */; };
+		FDB2BEC22A05271B0065D5CF /* AlertModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDB2BEC12A05271B0065D5CF /* AlertModel.swift */; };
 		FDE38A2E2A019400007C16C1 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDE38A2D2A019400007C16C1 /* Extensions.swift */; };
 		FDE38A302A0194E9007C16C1 /* ContentViewAssemble.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDE38A2F2A0194E9007C16C1 /* ContentViewAssemble.swift */; };
 		FDE38A322A019635007C16C1 /* ContentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDE38A312A019635007C16C1 /* ContentViewModel.swift */; };
@@ -53,6 +54,7 @@
 		FDB2BEBA2A04F2790065D5CF /* AudioRecorderService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioRecorderService.swift; sourceTree = "<group>"; };
 		FDB2BEBC2A04F2A30065D5CF /* AudioPlayerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayerService.swift; sourceTree = "<group>"; };
 		FDB2BEBE2A04F2AF0065D5CF /* FileService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileService.swift; sourceTree = "<group>"; };
+		FDB2BEC12A05271B0065D5CF /* AlertModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertModel.swift; sourceTree = "<group>"; };
 		FDE38A2D2A019400007C16C1 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		FDE38A2F2A0194E9007C16C1 /* ContentViewAssemble.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewAssemble.swift; sourceTree = "<group>"; };
 		FDE38A312A019635007C16C1 /* ContentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewModel.swift; sourceTree = "<group>"; };
@@ -151,9 +153,18 @@
 			path = Services;
 			sourceTree = "<group>";
 		};
+		FDB2BEC02A05270B0065D5CF /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				FDB2BEC12A05271B0065D5CF /* AlertModel.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		FDE38A332A01963B007C16C1 /* Flow */ = {
 			isa = PBXGroup;
 			children = (
+				FDB2BEC02A05270B0065D5CF /* Models */,
 				FD310D072A0104BD003D8103 /* ContentView.swift */,
 				FDE38A2F2A0194E9007C16C1 /* ContentViewAssemble.swift */,
 				FDE38A312A019635007C16C1 /* ContentViewModel.swift */,
@@ -298,6 +309,7 @@
 				FDB2BEBD2A04F2A30065D5CF /* AudioPlayerService.swift in Sources */,
 				FD310D062A0104BD003D8103 /* AudioRecordSwiftUIApp.swift in Sources */,
 				FDE38A322A019635007C16C1 /* ContentViewModel.swift in Sources */,
+				FDB2BEC22A05271B0065D5CF /* AlertModel.swift in Sources */,
 				FDB2BEBF2A04F2AF0065D5CF /* FileService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

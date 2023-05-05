@@ -32,6 +32,14 @@ struct ContentView: View {
                     }
                     .isHidden(viewModel.deleteButtonHidden)
                 }
+                .alert(
+                    viewModel.alertModel?.title ?? "",
+                    isPresented: $viewModel.needShowAllert) {
+                        Button("OK", role: .cancel) { }
+                    } message: {
+                        Text(viewModel.alertModel?.message ?? "")
+                    }
+
                 Spacer()
             }
         }

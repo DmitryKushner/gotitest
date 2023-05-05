@@ -8,7 +8,7 @@
 import AVFoundation
 
 protocol AudioRecorderServiceProtocol: AnyObject {
-    var successFinishRecordStateHandler: (() -> Void)? { get set }
+    var successFinishRecordStateHandler: ((Bool) -> Void)? { get set }
     func startRecord(with recordURL: URL, completion: @escaping (Bool) -> Void)
     func finishRecord()
 }
@@ -16,7 +16,7 @@ protocol AudioRecorderServiceProtocol: AnyObject {
 final class AudioRecorderService: NSObject, AudioRecorderServiceProtocol {
     // MARK: - Public Properties
     
-    var successFinishRecordStateHandler: (() -> Void)?
+    var successFinishRecordStateHandler: ((Bool) -> Void)?
     
     // MARK: - Private Properties
     
@@ -37,6 +37,7 @@ final class AudioRecorderService: NSObject, AudioRecorderServiceProtocol {
             try recordingSession.setCategory(.playAndRecord, mode: .default)
             try recordingSession.setActive(true)
         } catch {
+            completion(false)
             print("Failed to set up recording session")
         }
         
@@ -61,9 +62,7 @@ final class AudioRecorderService: NSObject, AudioRecorderServiceProtocol {
 
 extension AudioRecorderService: AVAudioRecorderDelegate {
     func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
-        if flag {
-            print("Record finished successfully")
-            successFinishRecordStateHandler?()
-        }
+        successFinishRecordStateHandler?(flag)
+        print(flag ? "Record finished successfully" : "Record cant finish")
     }
 }

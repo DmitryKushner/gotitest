@@ -8,12 +8,20 @@
 import Foundation
 
 protocol FileServiceProtocol: AnyObject {
+    func startRecordDirectoryURL() -> URL
     func fetchRecord() -> URL?
     func deleteRecord(with recordURL: URL, completion: @escaping (Bool) -> Void)
 }
 
 final class FileService: FileServiceProtocol {
     // MARK: - Public Methods
+    
+    func startRecordDirectoryURL() -> URL {
+        let documentPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        let audioFilename = documentPath
+            .appendingPathComponent("Test Dimas \(Date().toString(dateFormat: "dd-MM-YY 'at' HH:mm:ss")).m4a")
+        return audioFilename
+    }
     
     func fetchRecord() -> URL? {
         let path = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
@@ -27,8 +35,10 @@ final class FileService: FileServiceProtocol {
     
     func deleteRecord(with recordURL: URL, completion: @escaping (Bool) -> Void) {
         do {
-            try? FileManager.default.removeItem(at: recordURL)
+            try FileManager.default.removeItem(at: recordURL)
             completion(true)
+        } catch {
+            completion(false)
         }
     }
     
